@@ -1,13 +1,36 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.flex-container {
+    display: flex;
+    justify-content: flex-end;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin: 25px;
+    gap: 10px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.flex-container-center {
+    display: flex;
+    justify-content: center;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin: 25px;
+    gap: 10px;
+}
+
+.pdf-section {
+    border:2px;
+    border-color:rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    height: 800px;
+}
+
+.download-button {
+    background-color:solid #eeeeee;
+    border: none;
+    color: white;
+    padding: 7px 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
