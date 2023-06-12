@@ -5,25 +5,47 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
 
 
+
 function Screen() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
+    const [facultad, setFacultad] = useState([]);
+
+    const fetchFacultadData = () => {
+        fetch("http://localhost:8081/info/facultad/")
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                setFacultad(data)
+            })
+    }
+
+    useEffect(() => {
+        fetchFacultadData()
+    }, []);
+
+
+
+
     return <>
         <div class="flex-container">
             <div>
-                <select name="facultad" defaultValue="0">
-                    <option value="0">--Facultad--</option>
-                    <option value="1">Ingeniería</option>
-                    <option value="2">Otro</option>
-                </select>
+                {facultad.length > 0 && (
+                    <select name="facultad" defaultValue="0">
+                        <option value="0">--Facultad--</option>
+                        {facultad.map(facu => (
+                            <option value={facu.id}>{facu.nombre}</option>
+                        ))}
+                    </select>
+                )}
             </div>
             <div>
                 <select name="grupoInvestigacion" defaultValue="0">
                     <option value="0">--Grupo--</option>
-                    <option value="1">Grupo A</option>
-                    <option value="2">Grupo B</option>
                 </select>
             </div>
+
             <div>
                 <select name="semillero" defaultValue="0">
                     <option value="0">--Semillero--</option>
@@ -50,8 +72,9 @@ function Screen() {
             </div>
         </div>
         <div class="flex-container-center">
-            <button type="button" class="download-button"><Download/></button> 
+            <button type="button" class="download-button"><Download /></button>
         </div>
+
     </>
 
 }
