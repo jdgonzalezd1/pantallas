@@ -7,6 +7,15 @@
     gap: 10px;
 }
 
+.flex-container-start {
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin: 25px;
+    gap: 10px;
+}
+
 .flex-container-center {
     display: flex;
     justify-content: center;

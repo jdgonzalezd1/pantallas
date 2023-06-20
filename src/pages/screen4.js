@@ -46,7 +46,7 @@ function loadGrupo() {
 }
 
 
-function Screen() {
+function Screen4() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
@@ -83,21 +83,11 @@ function Screen() {
                 </select>
             </div>
             <div>
-                <select id="grupoInvestigacion" defaultValue="0">
-                    <option value="0">--Grupo--</option>
+                <select id="programa" defaultValue="0">
+                    <option value="0">--Programa--</option>
                 </select>
             </div>
 
-            <div>
-                <select name="semillero" defaultValue="0">
-                    <option value="0">--Semillero--</option>
-                </select>
-            </div>
-            <div>
-                <select name="proyecto" defaultValue="0">
-                    <option value="0">--Proyecto--</option>
-                </select>
-            </div>
             <div>
                 <button type="button">Generar reporte</button>
             </div>
@@ -118,4 +108,4 @@ function Screen() {
 
 }
 
-export default Screen;
+export default Screen4;
