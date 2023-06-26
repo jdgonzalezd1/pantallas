@@ -41,4 +41,19 @@ function loadSemillero(data, status){
     }
 }
 
-export {loadGrupo, loadSemillero};
+function loadPrograma(data, status){
+    try {
+        var programa = document.getElementById("programa");
+        switch (status) {
+            case '1001':
+                loadJson(data, programa);
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.log("Error", error);
+    } 
+}
+
+export {loadGrupo, loadSemillero, loadPrograma};
