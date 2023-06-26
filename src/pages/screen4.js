@@ -51,14 +51,15 @@ function Screen4() {
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
 
-    const fetchFacultadData = () => {
-        fetch("http://localhost:8081/info/facultad/")
-            .then(response => {
-                return response.json()
-            })
-            .then(data => {
-                setFacultad(data)
-            })
+    const fetchFacultadData = async () => {
+        try {
+            const result = await fetch("http://localhost:8081/filtro/facultad");
+            const parsedResponse = await result.json();
+            setFacultad(parsedResponse);
+        } catch (error) {
+            console.log("Error", error);
+        }
+
     }
 
     useEffect(() => {

@@ -17,7 +17,10 @@ const Layout = () => {
                         <Link to="/screen3">Reporte 3</Link>
                     </div>
                     <div>
-                        <Link to="/screen4">Reporte 5</Link>
+                        <Link to="/screen4">Reporte 4</Link>
+                    </div>
+                    <div>
+                        <Link to="/screen5">Reporte 5</Link>
                     </div>
                     <div>
                         <Link to="/firma">Firma</Link>

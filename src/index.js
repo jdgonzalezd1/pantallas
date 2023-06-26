@@ -4,6 +4,7 @@ import Screen1 from './pages/screen1';
 import Screen2 from './pages/screen2';
 import Screen3 from './pages/screen3';
 import Screen4 from './pages/screen4';
+import Screen5 from './pages/screen5';
 import UploadAndDisplayImage from './pages/firma';
 import Layout from './pages/menu';
 import './index.css'
@@ -18,6 +19,7 @@ export default function App(){
                     <Route path="screen2" element={<Screen2 />}/>
                     <Route path="screen3" element={<Screen3 />}/>
                     <Route path="screen4" element={<Screen4 />}/>
+                    <Route path="screen5" element={<Screen5 />}/>
                     <Route path="firma" element={<UploadAndDisplayImage />}/>
                 </Route>
             </Routes>
