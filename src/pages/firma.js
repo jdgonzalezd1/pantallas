@@ -6,7 +6,7 @@ const UploadAndDisplayImage = () => {
 
   return (
     <div>
-      <h1>Upload and Display Image usign React Hook's</h1>
+      <h1>Firma</h1>
 
       {selectedImage && (
         <div>

@@ -52,6 +52,10 @@ function Screen5() {
     }, []);
 
     return <>
+        <div hidden>
+            <input id='reportId' type='text'></input>
+            <input id='userId' type='text'></input>
+        </div>
         <div className="flex-container">
             <div>
                 <select id="facultad" defaultValue="0" onChange={loadGrupo}>

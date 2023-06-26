@@ -6,7 +6,11 @@ function loadJson(data,element) {
     data.map((item) => {
         opt = document.createElement('option');
         opt.value = item.id;
-        opt.innerHTML = item.nombre;
+        if (item.nombre == undefined){
+            opt.innerHTML = item.titulo;
+        }else{
+            opt.innerHTML = item.nombre;
+        } 
         element.appendChild(opt);
     })   
 }
@@ -28,7 +32,7 @@ function loadGrupo(data, status) {
 
 function loadSemillero(data, status){
     try {
-        var semillero = document.getElementById("semilleros");
+        var semillero = document.getElementById("semillero");
         switch (status) {
             case '3003':
                 loadJson(data, semillero);
@@ -56,4 +60,19 @@ function loadPrograma(data, status){
     } 
 }
 
-export {loadGrupo, loadSemillero, loadPrograma};
+function loadProyecto(data,status){
+    try {
+        var proyecto = document.getElementById("proyecto");
+        switch (status) {
+            case '4018':
+                loadJson(data, proyecto);
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.log("Error", error);
+    } 
+}
+
+export {loadGrupo, loadSemillero, loadPrograma, loadProyecto};

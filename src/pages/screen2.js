@@ -3,7 +3,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadGrupo} from './loadData';
+import { loadGrupo } from './loadData';
 
 
 
@@ -51,6 +51,10 @@ function Screen2() {
 
     return <>
         <div className="flex-container">
+            <div hidden>
+                <input id='reportId' type='text'></input>
+                <input id='userId' type='text'></input>
+            </div>
             <div>
                 <select classNameName="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
@@ -65,7 +69,7 @@ function Screen2() {
             </div>
             <div>
                 <select id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)}>
-                    <option value="0">--Grupo--</option>                    
+                    <option value="0">--Grupo--</option>
                 </select>
             </div>
 

@@ -55,6 +55,10 @@ function Screen4() {
 
     return <>
         <div className="flex-container">
+            <div hidden>
+                <input id='reportId' type='text'></input>
+                <input id='userId' type='text'></input>
+            </div>
             <div>
                 <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadPrograma(programa, statusF)}>
                     <option value="0">--Facultad--</option>

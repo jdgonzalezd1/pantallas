@@ -45,8 +45,8 @@ function Screen3() {
         }
     }
 
-    const fetchSemilleroData = async () =>{
-        try{
+    const fetchSemilleroData = async () => {
+        try {
             const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero", {
                 method: "POST",
 
@@ -59,7 +59,7 @@ function Screen3() {
             });
             const parsedResponse = await result.json();
             setSemillero(parsedResponse);
-        } catch(error){
+        } catch (error) {
             console.log("ªªªªªªErrorªªªªªª", error);
         }
     }
@@ -75,7 +75,11 @@ function Screen3() {
 
     return <>
         <div className="flex-container">
-        <div>
+            <div hidden>
+                <input id='reportId' type='text'></input>
+                <input id='userId' type='text'></input>
+            </div>
+            <div>
                 <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
@@ -89,12 +93,12 @@ function Screen3() {
             </div>
             <div>
                 <select className="form-control" id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)} onMouseOver={loadSemillero(semillero, statusG)}>
-                    <option value="0">--Grupo--</option>                    
+                    <option value="0">--Grupo--</option>
                 </select>
             </div>
 
             <div>
-                <select className="form-control" id="semilleros" value={statusS} onChange={(e) => setStatusG(e.target.value)}>
+                <select className="form-control" id="semillero" value={statusS} onChange={(e) => setStatusG(e.target.value)}>
                     <option value="0">--Semillero--</option>
                 </select>
             </div>

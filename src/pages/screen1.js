@@ -3,76 +3,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-
-
-//Datos de prueba
-//const grupoInv = ["Grupo A", "Grupo B"];
-const semillerosA = ["Semillero A", "Semillero B"];
-const semillerosB = ["Semillero C", "Semillero D"];
-
-/*
-Funciones de escritura de datos en la pantalla
-*/
-function loadJson(data, element) {
-    var opt = null;
-    data.map((item) => {
-        opt = document.createElement('option');
-        opt.value = item.id;
-        opt.innerHTML = item.value;
-        element.appendChild(opt);
-    })
-}
-function loadGrupo(data) {
-    try {
-        var facultad = document.getElementById("faculty").value;
-        var gruposInv = document.getElementById("grupoInvestigacion");
-        switch (facultad) {
-            case '1001':
-                loadJson(data, gruposInv);
-                break;
-            default:
-                break;
-        }
-    } catch (error) {
-        console.log("Error", error);
-    }
-
-}
-
-function loadSemilleros() {
-    var grupo = document.getElementById("grupoInvestigacion").value;
-    var semilleros = document.getElementById("semillero");
-    var semi = [];
-    var numSemilleros = 0;
-    switch (grupo) {
-        case '1':
-            semi = semillerosA;
-            numSemilleros = semi.length;
-            for (var i = 0; i < numSemilleros; i++) {
-                var opt = document.createElement('option');
-                //Nota: Establecer valor de forma dinámica
-                opt.value = i + 1;
-                opt.innerHTML = semi[i];
-                //Nota: Establecer opción de forma dinámica
-                semilleros.appendChild(opt);
-            }
-            break;
-        case '2':
-            semi = semillerosB;
-            numSemilleros = semi.length;
-            for (var i = 0; i < numSemilleros; i++) {
-                var opt = document.createElement('option');
-                //Nota: Establecer valor de forma dinámica
-                opt.value = i + 1;
-                opt.innerHTML = semi[i];
-                //Nota: Establecer opción de forma dinámica
-                semilleros.appendChild(opt);
-            }
-            break;
-        default:
-            break;
-    }
-}
+import { loadGrupo, loadSemillero, loadProyecto } from './loadData';
 
 /*
 Funciones de despliegue de pdf
@@ -92,8 +23,15 @@ function Screen1() {
     */
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
+
     const [facultad, setFacultad] = useState([]);
     const [grupo, setGrupo] = useState([]);
+    const [semillero, setSemillero] = useState([]);
+    const [proyecto, setProyecto] = useState([]);
+
+    const [statusF, setStatusF] = useState([]);
+    const [statusG, setStatusG] = useState([]);
+    const [statusS, setStatusS] = useState([]);
 
     const fetchFacultadData = async () => {
         try {
@@ -125,9 +63,50 @@ function Screen1() {
         }
     }
 
+    const fetchSemilleroData = async () => {
+        try {
+            const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero", {
+                method: "POST",
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    gi: 3003
+                })
+            });
+            const parsedResponse = await result.json();
+            setSemillero(parsedResponse);
+        } catch (error) {
+            console.log("ªªªªªªErrorªªªªªª", error);
+        }
+    }
+
+    const fetchProyectoData = async () => {
+        try {
+            const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero/proyecto", {
+                method: "POST",
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    semillero: 4018
+                })
+            });
+            const parsedResponse = await result.json();
+            setProyecto(parsedResponse);
+        } catch (error) {
+            console.log("ªªªªªªErrorªªªªªª", error);
+        }
+    }
+
+
     useEffect(() => {
         fetchFacultadData();
         fetchGrupoData();
+        fetchSemilleroData();
+        fetchProyectoData();
     }, []);
 
     /*
@@ -135,8 +114,12 @@ function Screen1() {
     */
     return <>
         <div className="flex-container">
+            <div hidden>
+                <input id='reportId' type='text'></input>
+                <input id='userId' type='text'></input>
+            </div>
             <div>
-                <select id="faculty" defaultValue="0" onChange={loadGrupo(grupo)}>
+                <select classNameName="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -148,13 +131,13 @@ function Screen1() {
                 </select>
             </div>
             <div>
-                <select id="grupoInvestigacion" defaultValue="0" onChange={loadSemilleros}>
+                <select className="form-control" id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)} onMouseOver={loadSemillero(semillero, statusG)}>
                     <option value="0">--Grupo--</option>
                 </select>
             </div>
 
             <div>
-                <select id="semillero" defaultValue="0">
+                <select className="form-control" id="semillero" value={statusS} onChange={(e) => setStatusS(e.target.value)} onMouseOver={loadProyecto(proyecto, statusS)}>
                     <option value="0">--Semillero--</option>
                 </select>
             </div>
@@ -184,14 +167,3 @@ function Screen1() {
 }
 
 export default Screen1;
-
-/*
-           for (var i = 0; i < numGrupos; i++) {
-               var opt = document.createElement('option');
-               //Nota: Establecer valor de forma dinámica
-               opt.value = i + 1;
-               opt.innerHTML = grupos[i];
-               //Nota: Establecer opción de forma dinámica
-               gruposInv.appendChild(opt);
-           }
-           */
