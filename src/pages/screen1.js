@@ -134,7 +134,7 @@ function Screen1() {
     Funcion de renderizado
     */
     return <>
-        <div class="flex-container">
+        <div className="flex-container">
             <div>
                 <select id="faculty" defaultValue="0" onChange={loadGrupo(grupo)}>
                     <option value="0">--Facultad--</option>
@@ -169,14 +169,14 @@ function Screen1() {
 
         </div>
         <div id="pdf" hidden>
-            <div class="pdf-section">
+            <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
                     <Viewer fileUrl="/Resources/boleta.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>
-        <div class="flex-container-center">
-            <button type="button" class="download-button"><Download /></button>
+        <div className="flex-container-center">
+            <button type="button" className="download-button"><Download /></button>
         </div>
 
     </>

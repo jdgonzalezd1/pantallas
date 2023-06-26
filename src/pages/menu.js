@@ -3,7 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 const Layout = () => {
     return (
         <>
-            <div class="flex-container-start">
+            <div className="flex-container-start">
                     <div>
                         <Link to="/">Home</Link>
                     </div>

@@ -3,39 +3,8 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
+import { loadGrupo} from './loadData';
 
-//const grupoInv = ["Grupo A", "Grupo B"];
-//const semilleros = ["---", "Semillero A", "Semillero B"];
-//const proyectos = ["---", "Proyecto A", "Proyecto B", "Proyecto C"]
-
-function loadJson(data,element) {
-    while(element.options.length > 1){
-        element.remove(1);
-    }
-    var opt = null;
-    data.map((item) => {
-        opt = document.createElement('option');
-        opt.value = item.id;
-        opt.innerHTML = item.nombre;
-        element.appendChild(opt);
-    })
-    
-}
-
-function loadGrupo(data, status) {
-    try {
-        var gruposInv = document.getElementById("grupoInvestigacion");
-        switch (status) {
-            case '1001':
-                loadJson(data, gruposInv);
-                break;
-            default:
-                break;
-        }
-    } catch (error) {
-        console.log("Error", error);
-    }
-}
 
 
 function Screen2() {
@@ -81,9 +50,9 @@ function Screen2() {
     }, []);
 
     return <>
-        <div class="flex-container">
+        <div className="flex-container">
             <div>
-                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                <select classNameName="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -106,14 +75,14 @@ function Screen2() {
 
         </div>
         <div>
-            <div class="pdf-section">
+            <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
                     <Viewer fileUrl="/Resources/boleta.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>
-        <div class="flex-container-center">
-            <button type="button" class="download-button"><Download /></button>
+        <div className="flex-container-center">
+            <button type="button" className="download-button"><Download /></button>
         </div>
 
     </>

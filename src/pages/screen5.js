@@ -4,10 +4,6 @@ import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
 
-const grupoInv = ["Grupo A", "Grupo B"];
-//const semilleros = ["---", "Semillero A", "Semillero B"];
-//const proyectos = ["---", "Proyecto A", "Proyecto B", "Proyecto C"]
-
 function loadJson(data, element) {
     var opt = null;
     data.map((item) => {
@@ -18,9 +14,6 @@ function loadJson(data, element) {
     })
 }
 
-function loadReport(){
-
-}
 
 function loadGrupo(data) {
     try {
@@ -59,7 +52,7 @@ function Screen5() {
     }, []);
 
     return <>
-        <div class="flex-container">
+        <div className="flex-container">
             <div>
                 <select id="facultad" defaultValue="0" onChange={loadGrupo}>
                     {facultad.length > 0 && (
@@ -73,19 +66,19 @@ function Screen5() {
                 </select>
             </div>
             <div>
-                <button type="button" onClick={loadReport}>Generar reporte</button>
+                <button type="button">Generar reporte</button>
             </div>
 
         </div>
         <div>
-            <div class="pdf-section">
+            <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
                     <Viewer fileUrl="/Resources/RepActGI-Solsytec-(2022-2023)-1000456123.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>
-        <div class="flex-container-center">
-            <button type="button" class="download-button"><Download /></button>
+        <div className="flex-container-center">
+            <button type="button" className="download-button"><Download /></button>
         </div>
 
     </>
