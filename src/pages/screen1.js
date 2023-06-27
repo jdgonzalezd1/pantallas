@@ -8,10 +8,12 @@ import { loadGrupo, loadSemillero, loadProyecto } from './loadData';
 /*
 Funciones de despliegue de pdf
 */
-function displayPdf() {
+
+function displayPdf(data) {
     let pdf = document.getElementById("pdf");
-    pdf.removeAttribute("hidden");
+    //pdf.removeAttribute("hidden");
 }
+
 
 /*
 Funcion de despliegue de pantalla
@@ -23,6 +25,10 @@ function Screen1() {
     */
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
+    const [pdf, setPdf] = useState([]);
+    const [pdfUrl, setPdfUrl] = useState("");
+    const [userId, setUserId] = useState("1000689373");
+    const [reportId, setReportId] = useState("22");
 
     const [facultad, setFacultad] = useState([]);
     const [grupo, setGrupo] = useState([]);
@@ -32,6 +38,46 @@ function Screen1() {
     const [statusF, setStatusF] = useState([]);
     const [statusG, setStatusG] = useState([]);
     const [statusS, setStatusS] = useState([]);
+    const [statusPj, setStatusPj] = useState([]);
+
+
+
+    const fetchPdfData = async () => {
+        try {
+            const result = await fetch("http://localhost:8081/report/generar", {
+                method: "POST",
+
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    dato: 5004,
+                    reporte: 22,
+                    usuario: 1000689373
+                })
+            });
+            const parsedResponse = await result.json();
+            setPdf(parsedResponse);
+        } catch (error) {
+            console.log("ªªªªªªErrorªªªªªª", error);
+        }
+
+        var url = "http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf";
+        setPdfUrl(url); 
+    }
+
+
+    const fetchReportData = async () => {
+        try {
+            const result = await fetch(pdfUrl);
+            const parsedResponse = await result.json();
+            setPdfUrl(parsedResponse);
+        } catch (error) {
+            console.log("ªªªªªªErrorªªªªªª", error);
+        }
+    }
+
 
     const fetchFacultadData = async () => {
         try {
@@ -107,6 +153,8 @@ function Screen1() {
         fetchGrupoData();
         fetchSemilleroData();
         fetchProyectoData();
+        fetchPdfData();
+        fetchReportData();
     }, []);
 
     /*
@@ -115,11 +163,11 @@ function Screen1() {
     return <>
         <div className="flex-container">
             <div hidden>
-                <input id='reportId' type='text'></input>
-                <input id='userId' type='text'></input>
+                <input id='reportId' type='text' value={reportId}/**/></input>
+                <input id='userId' type='text' value={userId}/*Traer id usuario*/></input>
             </div>
             <div>
-                <select classNameName="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -142,19 +190,19 @@ function Screen1() {
                 </select>
             </div>
             <div>
-                <select id="proyecto" defaultValue="0">
+                <select className="form-control" id="proyecto" value={statusPj} onChange={(e) => setStatusPj(e.target.value)}>
                     <option value="0">--Proyecto--</option>
                 </select>
             </div>
             <div>
-                <button type="button" onClick={displayPdf}>Generar reporte</button>
+                <button type="button">Generar reporte</button>
             </div>
 
         </div>
-        <div id="pdf" hidden>
+        <div id="pdf">
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="/Resources/boleta.pdf" plugins={[getFilePluginInstance]} />
+                    <Viewer fileUrl={pdfUrl} plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>
