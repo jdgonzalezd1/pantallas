@@ -6,27 +6,18 @@ import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import { loadGrupo, loadSemillero, loadProyecto } from './loadData';
 
 /*
-Funciones de despliegue de pdf
-*/
-
-function displayPdf(data) {
-    let pdf = document.getElementById("pdf");
-    //pdf.removeAttribute("hidden");
-}
-
-
-/*
 Funcion de despliegue de pantalla
 */
 
-function Screen1() {
+function FacGISemProy() {
     /*
     Funciones de carga de datos desde la API
     */
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [pdf, setPdf] = useState([]);
-    const [pdfUrl, setPdfUrl] = useState("");
+    const [pdfUrl, setPdfUrl] = useState("http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf");
+    const [pdfUrl1, setPdfUrl1] = useState(null);
     const [userId, setUserId] = useState("1000689373");
     const [reportId, setReportId] = useState("22");
 
@@ -39,7 +30,6 @@ function Screen1() {
     const [statusG, setStatusG] = useState([]);
     const [statusS, setStatusS] = useState([]);
     const [statusPj, setStatusPj] = useState([]);
-
 
 
     const fetchPdfData = async () => {
@@ -60,19 +50,22 @@ function Screen1() {
             const parsedResponse = await result.json();
             setPdf(parsedResponse);
         } catch (error) {
-            console.log("ªªªªªªErrorªªªªªª", error);
+            console.log("Error xd", error);
         }
 
-        var url = "http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf";
-        setPdfUrl(url); 
+        
+        var pdf = "http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf";
+        //const blob = base64toBlob(pdf);
+        //const url = URL.createObjectURL(blob);
+        setPdfUrl(pdf);
     }
 
 
     const fetchReportData = async () => {
         try {
-            const result = await fetch(pdfUrl);
+            const result = await fetch("http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf");
             const parsedResponse = await result.json();
-            setPdfUrl(parsedResponse);
+            setPdfUrl1(parsedResponse);
         } catch (error) {
             console.log("ªªªªªªErrorªªªªªª", error);
         }
@@ -149,12 +142,17 @@ function Screen1() {
 
 
     useEffect(() => {
-        fetchFacultadData();
-        fetchGrupoData();
-        fetchSemilleroData();
-        fetchProyectoData();
-        fetchPdfData();
-        fetchReportData();
+        let timer = setTimeout(() => {
+            fetchFacultadData();
+            fetchGrupoData();
+            fetchSemilleroData();
+            fetchProyectoData();
+            fetchPdfData();
+            fetchReportData();
+        }, 1000);
+
+        
+        return () => clearTimeout(timer)
     }, []);
 
     /*
@@ -163,8 +161,8 @@ function Screen1() {
     return <>
         <div className="flex-container">
             <div hidden>
-                <input id='reportId' type='text' value={reportId}/**/></input>
-                <input id='userId' type='text' value={userId}/*Traer id usuario*/></input>
+                <input id='reportId' type='text' defaultValue={reportId}/*Traer id reporte*/></input>
+                <input id='userId' type='text' defaultValue={userId}/*Traer id usuario*/></input>
             </div>
             <div>
                 <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
@@ -214,4 +212,4 @@ function Screen1() {
 
 }
 
-export default Screen1;
+export default FacGISemProy;

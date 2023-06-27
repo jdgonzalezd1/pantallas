@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Screen1 from './pages/screen1';
+import FacGISemProy from './pages/facGISemProy';
 import Screen2 from './pages/screen2';
 import Screen3 from './pages/screen3';
 import Screen4 from './pages/screen4';
@@ -15,7 +15,7 @@ export default function App(){
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route path="screen1" element={<Screen1 />}/>
+                    <Route path="facGISemProy" element={<FacGISemProy />}/>
                     <Route path="screen2" element={<Screen2 />}/>
                     <Route path="screen3" element={<Screen3 />}/>
                     <Route path="screen4" element={<Screen4 />}/>

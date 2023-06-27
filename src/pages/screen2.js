@@ -56,7 +56,7 @@ function Screen2() {
                 <input id='userId' type='text'></input>
             </div>
             <div>
-                <select classNameName="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
