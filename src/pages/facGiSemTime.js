@@ -5,7 +5,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import { loadGrupo, loadSemillero } from './loadData';
 
-function Screen3() {
+function FacGiSemTime() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
@@ -102,6 +102,31 @@ function Screen3() {
                     <option value="0">--Semillero--</option>
                 </select>
             </div>
+            <div>
+                <select className="form-control" id="anoIni">
+                    <option value="0">--Año inicial--</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+
+            <div>
+                <select className="form-control" id="anoFin">
+                    <option value="0">--Año Final--</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
 
             <div>
                 <button type="button">Generar reporte</button>
@@ -123,4 +148,4 @@ function Screen3() {
 
 }
 
-export default Screen3;
+export default FacGiSemTime;

@@ -3,39 +3,17 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-
-function loadJson(data, element) {
-    var opt = null;
-    data.map((item) => {
-        opt = document.createElement('option');
-        opt.value = item.id;
-        opt.innerHTML = item.value;
-        element.appendChild(opt);
-    })
-}
+import { loadGrupo } from './loadData';
 
 
-function loadGrupo(data) {
-    try {
-        var facultad = document.getElementById("faculty").value;
-        var gruposInv = document.getElementById("grupoInvestigacion");
-        switch (facultad) {
-            case '1001':
-                loadJson(data, gruposInv);
-                break;
-            default:
-                break;
-        }
-    } catch (error) {
-        console.log("Error", error);
-    }
-}
 
-
-function Screen5() {
+function FacGi() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
+    const [grupo, setGrupo] = useState([]);
+    const [statusF, setStatusF] = useState("");
+    const [statusG, setStatusG] = useState("");
 
     const fetchFacultadData = async () => {
         try {
@@ -47,21 +25,41 @@ function Screen5() {
         }
     }
 
+    const fetchGrupoData = async () => {
+        try {
+            const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
+                method: "POST",
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    facultad: 1001
+                })
+            });
+            const parsedResponse = await result.json();
+            setGrupo(parsedResponse);
+        } catch (error) {
+            console.log("Error", error);
+        }
+    }
+
     useEffect(() => {
-        fetchFacultadData()
+        fetchFacultadData();
+        fetchGrupoData();
     }, []);
 
     return <>
-        <div hidden>
-            <input id='reportId' type='text'></input>
-            <input id='userId' type='text'></input>
-        </div>
         <div className="flex-container">
+            <div hidden>
+                <input id='reportId' type='text'></input>
+                <input id='userId' type='text'></input>
+            </div>
             <div>
-                <select id="facultad" defaultValue="0" onChange={loadGrupo}>
+                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                    <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
-                            <option value="0">--Facultad--</option>
                             {facultad.map(facu => (
                                 <option value={facu.id}>{facu.nombre}</option>
                             ))}
@@ -70,6 +68,12 @@ function Screen5() {
                 </select>
             </div>
             <div>
+                <select id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)}>
+                    <option value="0">--Grupo--</option>
+                </select>
+            </div>
+
+            <div>
                 <button type="button">Generar reporte</button>
             </div>
 
@@ -77,7 +81,7 @@ function Screen5() {
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="/Resources/RepActGI-Solsytec-(2022-2023)-1000456123.pdf" plugins={[getFilePluginInstance]} />
+                    <Viewer fileUrl="/Resources/boleta.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>
@@ -89,4 +93,4 @@ function Screen5() {
 
 }
 
-export default Screen5;
+export default FacGi;

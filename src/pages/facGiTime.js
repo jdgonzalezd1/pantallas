@@ -3,17 +3,17 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadPrograma } from './loadData';
+import { loadGrupo } from './loadData';
 
 
-function Screen4() {
+
+function FacGiTime() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
-    const [programa, setPrograma] = useState([]);
+    const [grupo, setGrupo] = useState([]);
     const [statusF, setStatusF] = useState("");
-    const [statusP, setStatusP] = useState("");
-
+    const [statusG, setStatusG] = useState("");
 
     const fetchFacultadData = async () => {
         try {
@@ -23,12 +23,11 @@ function Screen4() {
         } catch (error) {
             console.log("Error", error);
         }
-
     }
 
-    const fetchProgramaData = async () => {
+    const fetchGrupoData = async () => {
         try {
-            const result = await fetch("http://localhost:8081/filtro/facultad/programa", {
+            const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
                 method: "POST",
 
                 headers: {
@@ -39,7 +38,7 @@ function Screen4() {
                 })
             });
             const parsedResponse = await result.json();
-            setPrograma(parsedResponse);
+            setGrupo(parsedResponse);
         } catch (error) {
             console.log("Error", error);
         }
@@ -47,11 +46,8 @@ function Screen4() {
 
     useEffect(() => {
         fetchFacultadData();
-        fetchProgramaData();
+        fetchGrupoData();
     }, []);
-
-
-
 
     return <>
         <div className="flex-container">
@@ -60,7 +56,7 @@ function Screen4() {
                 <input id='userId' type='text'></input>
             </div>
             <div>
-                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadPrograma(programa, statusF)}>
+                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -72,8 +68,33 @@ function Screen4() {
                 </select>
             </div>
             <div>
-                <select className="form-control" id="programa" value={statusP} onChange={(e) => setStatusP(e.target.value)}>
-                    <option value="0">--Programa--</option>
+                <select id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)}>
+                    <option value="0">--Grupo--</option>
+                </select>
+            </div>
+            <div>
+                <select className="form-control" id="anoIni">
+                    <option value="0">--Año inicial--</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+
+            <div>
+                <select className="form-control" id="anoFin">
+                    <option value="0">--Año Final--</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
                 </select>
             </div>
 
@@ -97,4 +118,4 @@ function Screen4() {
 
 }
 
-export default Screen4;
+export default FacGiTime;

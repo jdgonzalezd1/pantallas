@@ -1,4 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
+import subNav from "../menu/subNav";
 
 const Layout = () => {
     return (
@@ -8,26 +9,30 @@ const Layout = () => {
                         <Link to="/">Home</Link>
                     </div>
                     <div>
-                        <Link to="/facGIsemProy">Reporte 1</Link>
+                        <Link to="/facGiSemProy">Reporte 1</Link>
                     </div>
                     <div>
-                        <Link to="/screen2">Reporte 2</Link>
+                        <Link to="/facGi">Reporte 2</Link>
                     </div>
                     <div>
-                        <Link to="/screen3">Reporte 3</Link>
+                        <Link to="/facGiSem">Reporte 3</Link>
                     </div>
                     <div>
-                        <Link to="/screen4">Reporte 4</Link>
+                        <Link to="/facProg">Reporte 4</Link>
                     </div>
                     <div>
-                        <Link to="/screen5">Reporte 5</Link>
+                        <Link to="/fac">Reporte 5</Link>
+                    </div>
+                    <div>
+                        <Link to="/facGiSemTime">Reporte 6</Link>
+                    </div>
+                    <div>
+                        <Link to="/facGiTime">Reporte 7</Link>
                     </div>
                     <div>
                         <Link to="/firma">Firma</Link>
                     </div>
-            </div>
-
-
+            </div>  
             <Outlet />
         </>
     )
