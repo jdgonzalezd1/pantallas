@@ -1,18 +1,20 @@
-function loadJson(data,element) {
-    while(element.options.length > 1){
+import { json } from "react-router-dom";
+
+function loadJson(data, element) {
+    while (element.options.length > 1) {
         element.remove(1);
     }
     var opt = null;
     data.map((item) => {
         opt = document.createElement('option');
         opt.value = item.id;
-        if (item.nombre == undefined){
+        if (item.nombre == undefined) {
             opt.innerHTML = item.titulo;
-        }else{
+        } else {
             opt.innerHTML = item.nombre;
-        } 
+        }
         element.appendChild(opt);
-    })   
+    })
 }
 
 function loadGrupo(data, status) {
@@ -30,7 +32,7 @@ function loadGrupo(data, status) {
     }
 }
 
-function loadSemillero(data, status){
+function loadSemillero(data, status) {
     try {
         var semillero = document.getElementById("semillero");
         switch (status) {
@@ -45,7 +47,7 @@ function loadSemillero(data, status){
     }
 }
 
-function loadPrograma(data, status){
+function loadPrograma(data, status) {
     try {
         var programa = document.getElementById("programa");
         switch (status) {
@@ -57,10 +59,10 @@ function loadPrograma(data, status){
         }
     } catch (error) {
         console.log("Error", error);
-    } 
+    }
 }
 
-function loadProyecto(data,status){
+function loadProyecto(data, status) {
     try {
         var proyecto = document.getElementById("proyecto");
         switch (status) {
@@ -72,7 +74,18 @@ function loadProyecto(data,status){
         }
     } catch (error) {
         console.log("Error", error);
-    } 
+    }
 }
 
-export {loadGrupo, loadSemillero, loadPrograma, loadProyecto};
+function setRequest(url) {
+    try {
+        let parse = JSON.stringify(url);
+        let temp = JSON.parse(parse);
+        parse = "http://localhost:8081/archivo/get/reporte/"+temp.nombreDocumento;
+        return parse;
+    } catch (error) {
+        console.log("Error on setRequest", error);
+    }
+}
+
+export { loadGrupo, loadSemillero, loadPrograma, loadProyecto, setRequest};

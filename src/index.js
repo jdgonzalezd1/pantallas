@@ -25,7 +25,7 @@ export default function App(){
                     <Route path="fac" element={<Fac />}/>
                     <Route path="facGiSemTime" element={<FacGiSemTime />}/>
                     <Route path="facGiTime" element={<FacGiTime />}/>
-                    <Route path="firma" element={<UploadAndDisplayImage />}/>
+                    <Route path="firma/:reportId" element={<UploadAndDisplayImage />}/>
                 </Route>
             </Routes>
         </BrowserRouter>

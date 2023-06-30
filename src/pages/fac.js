@@ -77,7 +77,7 @@ function Fac() {
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="/Resources/RepActGI-Solsytec-(2022-2023)-1000456123.pdf" plugins={[getFilePluginInstance]} />
+                    <Viewer fileUrl="http://localhost:8081/archivo/get/reporte/RepGIsFac-FACULTAD DE INGENIERIA-1000689373.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>

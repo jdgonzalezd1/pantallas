@@ -98,7 +98,7 @@ function FacGiSem() {
             </div>
 
             <div>
-                <select className="form-control" id="semillero" value={statusS} onChange={(e) => setStatusG(e.target.value)}>
+                <select className="form-control" id="semillero" value={statusS} onChange={(e) => setStatusS(e.target.value)}>
                     <option value="0">--Semillero--</option>
                 </select>
             </div>
@@ -111,7 +111,7 @@ function FacGiSem() {
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="/Resources/boleta.pdf" plugins={[getFilePluginInstance]} />
+                    <Viewer fileUrl="http://localhost:8081/archivo/get/reporte/RepSemPartConvA-Cábalas de Software-1000689373.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>

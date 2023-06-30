@@ -1,5 +1,4 @@
 import { Outlet, Link } from "react-router-dom";
-import subNav from "../menu/subNav";
 
 const Layout = () => {
     return (

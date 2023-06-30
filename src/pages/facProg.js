@@ -85,7 +85,7 @@ function FacProg() {
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="/Resources/boleta.pdf" plugins={[getFilePluginInstance]} />
+                    <Viewer fileUrl="http://localhost:8081/archivo/get/reporte/RepSemsProg-INGENIERA DE SISTEMAS-1000689373.pdf" plugins={[getFilePluginInstance]} />
                 </Worker>
             </div>
         </div>

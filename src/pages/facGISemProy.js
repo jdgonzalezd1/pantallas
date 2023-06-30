@@ -3,7 +3,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadGrupo, loadSemillero, loadProyecto } from './loadData';
+import { loadGrupo, loadSemillero, loadProyecto, setRequest } from './loadData';
 
 /*
 Funcion de despliegue de pantalla
@@ -16,10 +16,10 @@ function FacGISemProy() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [pdf, setPdf] = useState([]);
-    const [pdfUrl, setPdfUrl] = useState("http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf");
-    const [pdfUrl1, setPdfUrl1] = useState(null);
+    const [pdfUrl, setPdfUrl] = useState("");
     const [userId, setUserId] = useState("1000689373");
     const [reportId, setReportId] = useState("22");
+    const [objt, setObjt] = useState({});
 
     const [facultad, setFacultad] = useState([]);
     const [grupo, setGrupo] = useState([]);
@@ -34,6 +34,11 @@ function FacGISemProy() {
 
     const fetchPdfData = async () => {
         try {
+            setObjt({
+                dato: statusPj,
+                reporte: reportId,
+                usuario: userId
+            })
             const result = await fetch("http://localhost:8081/report/generar", {
                 method: "POST",
 
@@ -41,35 +46,18 @@ function FacGISemProy() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    dato: 5004,
-                    reporte: 22,
-                    usuario: 1000689373
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setPdf(parsedResponse);
+            let url = setRequest(pdf);
+            setPdfUrl(url);
         } catch (error) {
             console.log("Error xd", error);
         }
 
-        
-        var pdf = "http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf";
-        //const blob = base64toBlob(pdf);
-        //const url = URL.createObjectURL(blob);
-        setPdfUrl(pdf);
     }
 
-
-    const fetchReportData = async () => {
-        try {
-            const result = await fetch("http://localhost:8081/archivo/get/reporte/RepProy-Proyecto 4-1000689373.pdf");
-            const parsedResponse = await result.json();
-            setPdfUrl1(parsedResponse);
-        } catch (error) {
-            console.log("ªªªªªªErrorªªªªªª", error);
-        }
-    }
 
 
     const fetchFacultadData = async () => {
@@ -142,17 +130,10 @@ function FacGISemProy() {
 
 
     useEffect(() => {
-        let timer = setTimeout(() => {
-            fetchFacultadData();
-            fetchGrupoData();
-            fetchSemilleroData();
-            fetchProyectoData();
-            fetchPdfData();
-            fetchReportData();
-        }, 1000);
-
-        
-        return () => clearTimeout(timer)
+        fetchFacultadData();
+        fetchGrupoData();
+        fetchSemilleroData();
+        fetchProyectoData();
     }, []);
 
     /*
@@ -193,14 +174,16 @@ function FacGISemProy() {
                 </select>
             </div>
             <div>
-                <button type="button">Generar reporte</button>
+                <button type="button" onClick={fetchPdfData}>Generar reporte</button>
             </div>
 
         </div>
         <div id="pdf">
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl={pdfUrl} plugins={[getFilePluginInstance]} />
+                    {pdfUrl && (
+                        <Viewer fileUrl={pdfUrl} plugins={[getFilePluginInstance]} />
+                    )}
                 </Worker>
             </div>
         </div>
