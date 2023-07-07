@@ -8,7 +8,7 @@ function loadJson(data, element) {
     data.map((item) => {
         opt = document.createElement('option');
         opt.value = item.id;
-        if (item.nombre == undefined) {
+        if (item.nombre === undefined) {
             opt.innerHTML = item.titulo;
         } else {
             opt.innerHTML = item.nombre;
@@ -17,16 +17,19 @@ function loadJson(data, element) {
     })
 }
 
+function validateStatus(data, status, element){
+    if(status !== null){
+        if(status !== undefined){
+            loadJson(data,element);
+        }
+
+    }
+}
+
 function loadGrupo(data, status) {
     try {
         var gruposInv = document.getElementById("grupoInvestigacion");
-        switch (status) {
-            case '1001':
-                loadJson(data, gruposInv);
-                break;
-            default:
-                break;
-        }
+        validateStatus(data, status, gruposInv);
     } catch (error) {
         console.log("Error", error);
     }
@@ -35,6 +38,8 @@ function loadGrupo(data, status) {
 function loadSemillero(data, status) {
     try {
         var semillero = document.getElementById("semillero");
+        validateStatus(data,status,semillero);
+        /*
         switch (status) {
             case '3003':
                 loadJson(data, semillero);
@@ -42,6 +47,7 @@ function loadSemillero(data, status) {
             default:
                 break;
         }
+        */
     } catch (error) {
         console.log("Error", error);
     }
@@ -50,6 +56,8 @@ function loadSemillero(data, status) {
 function loadPrograma(data, status) {
     try {
         var programa = document.getElementById("programa");
+        validateStatus(data,status,programa);
+        /*
         switch (status) {
             case '1001':
                 loadJson(data, programa);
@@ -57,6 +65,7 @@ function loadPrograma(data, status) {
             default:
                 break;
         }
+        */
     } catch (error) {
         console.log("Error", error);
     }
@@ -65,6 +74,8 @@ function loadPrograma(data, status) {
 function loadProyecto(data, status) {
     try {
         var proyecto = document.getElementById("proyecto");
+        validateStatus(data,status,proyecto);
+        /*
         switch (status) {
             case '4018':
                 loadJson(data, proyecto);
@@ -72,6 +83,7 @@ function loadProyecto(data, status) {
             default:
                 break;
         }
+        */
     } catch (error) {
         console.log("Error", error);
     }

@@ -7,6 +7,7 @@ import Fac from './pages/fac';
 import FacGISemProy from './pages/facGiSemProy';
 import FacGiSemTime from './pages/facGiSemTime';
 import FacGiTime from './pages/facGiTime';
+import Admin from './userMenu/user1';
 import UploadAndDisplayImage from './pages/firma';
 import Layout from './pages/menu';
 import './index.css'
@@ -25,7 +26,8 @@ export default function App(){
                     <Route path="fac" element={<Fac />}/>
                     <Route path="facGiSemTime" element={<FacGiSemTime />}/>
                     <Route path="facGiTime" element={<FacGiTime />}/>
-                    <Route path="firma/:reportId" element={<UploadAndDisplayImage />}/>
+                    <Route path="firma" element={<UploadAndDisplayImage />}/>
+                    <Route path="user1" element={<Admin />}/>
                 </Route>
             </Routes>
         </BrowserRouter>

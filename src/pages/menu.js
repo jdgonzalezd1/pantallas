@@ -31,6 +31,9 @@ const Layout = () => {
                     <div>
                         <Link to="/firma">Firma</Link>
                     </div>
+                    <div>
+                        <Link to="/user1">Usuario 1</Link>
+                    </div>
             </div>  
             <Outlet />
         </>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
@@ -18,8 +19,9 @@ function FacGISemProy() {
     const [pdf, setPdf] = useState([]);
     const [pdfUrl, setPdfUrl] = useState("");
     const [userId, setUserId] = useState("1000689373");
-    const [reportId, setReportId] = useState("22");
     const [objt, setObjt] = useState({});
+    const location = useLocation();
+    const { reportId } = location.state;
 
     const [facultad, setFacultad] = useState([]);
     const [grupo, setGrupo] = useState([]);
@@ -58,8 +60,6 @@ function FacGISemProy() {
 
     }
 
-
-
     const fetchFacultadData = async () => {
         try {
             const result = await fetch("http://localhost:8081/filtro/facultad");
@@ -73,15 +73,16 @@ function FacGISemProy() {
 
     const fetchGrupoData = async () => {
         try {
+            setObjt({
+                facultad: statusF
+            })
             const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    facultad: 1001
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setGrupo(parsedResponse);
@@ -92,15 +93,16 @@ function FacGISemProy() {
 
     const fetchSemilleroData = async () => {
         try {
+            setObjt({
+                gi: statusG
+            })
             const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    gi: 3003
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setSemillero(parsedResponse);
@@ -111,15 +113,16 @@ function FacGISemProy() {
 
     const fetchProyectoData = async () => {
         try {
+            setObjt({
+                semillero: statusS
+            })
             const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero/proyecto", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    semillero: 4018
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setProyecto(parsedResponse);
@@ -131,9 +134,6 @@ function FacGISemProy() {
 
     useEffect(() => {
         fetchFacultadData();
-        fetchGrupoData();
-        fetchSemilleroData();
-        fetchProyectoData();
     }, []);
 
     /*
@@ -142,11 +142,15 @@ function FacGISemProy() {
     return <>
         <div className="flex-container">
             <div hidden>
-                <input id='reportId' type='text' defaultValue={reportId}/*Traer id reporte*/></input>
+                <input id='reportId' type='text' value={reportId}/*Traer id reporte*/></input>
                 <input id='userId' type='text' defaultValue={userId}/*Traer id usuario*/></input>
             </div>
             <div>
-                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                <select id="facultad"
+                    value={statusF}
+                    onChange={(e) => setStatusF(e.target.value)}                    
+                    onMouseOut={fetchGrupoData}
+                    >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -158,18 +162,32 @@ function FacGISemProy() {
                 </select>
             </div>
             <div>
-                <select className="form-control" id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)} onMouseOver={loadSemillero(semillero, statusG)}>
+                <select id="grupoInvestigacion" 
+                value={statusG} 
+                onChange={(e) => setStatusG(e.target.value)}
+                onMouseOver={loadGrupo(grupo, statusF)}
+                onMouseOut={fetchSemilleroData}
+                >
                     <option value="0">--Grupo--</option>
                 </select>
             </div>
 
             <div>
-                <select className="form-control" id="semillero" value={statusS} onChange={(e) => setStatusS(e.target.value)} onMouseOver={loadProyecto(proyecto, statusS)}>
+                <select id="semillero"
+                value={statusS}
+                onChange={(e) => setStatusS(e.target.value)} 
+                onMouseOver={loadSemillero(semillero, statusG)}
+                onMouseOut={fetchProyectoData}
+                >
                     <option value="0">--Semillero--</option>
                 </select>
             </div>
             <div>
-                <select className="form-control" id="proyecto" value={statusPj} onChange={(e) => setStatusPj(e.target.value)}>
+                <select id="proyecto" 
+                value={statusPj} 
+                onChange={(e) => setStatusPj(e.target.value)}
+                onMouseOver={loadProyecto(proyecto, statusPj)}
+                >
                     <option value="0">--Proyecto--</option>
                 </select>
             </div>

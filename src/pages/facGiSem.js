@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
@@ -14,6 +15,9 @@ function FacGiSem() {
     const [statusF, setStatusF] = useState("");
     const [statusG, setStatusG] = useState("");
     const [statusS, setStatusS] = useState("");
+
+    const location = useLocation();
+    const {reportId} = location.state;
 
     const fetchFacultadData = async () => {
         try {
@@ -76,7 +80,7 @@ function FacGiSem() {
     return <>
         <div className="flex-container">
             <div hidden>
-                <input id='reportId' type='text'></input>
+                <input id={reportId} type='text'></input>
                 <input id='userId' type='text'></input>
             </div>
             <div>

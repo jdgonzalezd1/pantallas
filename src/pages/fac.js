@@ -3,40 +3,14 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-
-function loadJson(data, element) {
-    var opt = null;
-    data.map((item) => {
-        opt = document.createElement('option');
-        opt.value = item.id;
-        opt.innerHTML = item.value;
-        element.appendChild(opt);
-    })
-}
-
-
-function loadGrupo(data) {
-    try {
-        var facultad = document.getElementById("faculty").value;
-        var gruposInv = document.getElementById("grupoInvestigacion");
-        switch (facultad) {
-            case '1001':
-                loadJson(data, gruposInv);
-                break;
-            default:
-                break;
-        }
-    } catch (error) {
-        console.log("Error", error);
-    }
-}
-
+import { useFetchGet } from './fetchData';
 
 function Fac() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
-
+    const [statusF, setStatusF] = useState([]);
+    
     const fetchFacultadData = async () => {
         try {
             const result = await fetch("http://localhost:8081/filtro/facultad");
@@ -46,9 +20,9 @@ function Fac() {
             console.log("Error", error);
         }
     }
-
+    
     useEffect(() => {
-        fetchFacultadData()
+        fetchFacultadData();
     }, []);
 
     return <>
@@ -58,7 +32,7 @@ function Fac() {
         </div>
         <div className="flex-container">
             <div>
-                <select id="facultad" defaultValue="0" onChange={loadGrupo}>
+                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)}>
                     {facultad.length > 0 && (
                         <>
                             <option value="0">--Facultad--</option>
