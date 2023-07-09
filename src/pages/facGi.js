@@ -3,7 +3,8 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadGrupo } from './loadData';
+import { loadGrupo, setRequest } from './loadData';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -14,6 +15,14 @@ function FacGi() {
     const [grupo, setGrupo] = useState([]);
     const [statusF, setStatusF] = useState("");
     const [statusG, setStatusG] = useState("");
+
+    const [objt, setObjt] = useState({});
+    const [userId, setUserId] = useState("1000689373");
+    const location = useLocation();
+    const { reportId } = location.state;
+
+    const [pdf, setPdf] = useState([]);
+    const [pdfUrl, setPdfUrl] = useState("");
 
     const fetchFacultadData = async () => {
         try {
@@ -27,15 +36,16 @@ function FacGi() {
 
     const fetchGrupoData = async () => {
         try {
+            setObjt({
+                facultad: statusF
+            })
             const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    facultad: 1001
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setGrupo(parsedResponse);
@@ -44,9 +54,34 @@ function FacGi() {
         }
     }
 
+    const fetchPdfData = async () => {
+        try {
+            setObjt({
+                dato: statusG,
+                reporte: reportId,
+                usuario: userId
+            })
+            const result = await fetch("http://localhost:8081/report/generar", {
+                method: "POST",
+
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objt)
+            });
+            const parsedResponse = await result.json();
+            setPdf(parsedResponse);
+            let url = setRequest(pdf);
+            setPdfUrl(url);
+        } catch (error) {
+            console.log("Error xd", error);
+        }
+
+    }
+
     useEffect(() => {
         fetchFacultadData();
-        fetchGrupoData();
     }, []);
 
     return <>
@@ -56,7 +91,11 @@ function FacGi() {
                 <input id='userId' type='text'></input>
             </div>
             <div>
-                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                <select id="facultad"
+                    value={statusF}
+                    onChange={(e) => setStatusF(e.target.value)}
+                    onMouseOut={fetchGrupoData}
+                >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -68,20 +107,28 @@ function FacGi() {
                 </select>
             </div>
             <div>
-                <select id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)}>
-                    <option value="0">--Grupo--</option>
-                </select>
+                <div>
+                    <select id="grupoInvestigacion"
+                        value={statusG}
+                        onChange={(e) => setStatusG(e.target.value)}
+                        onMouseOver={loadGrupo(grupo, statusF)}
+                    >
+                        <option value="0">--Grupo--</option>
+                    </select>
+                </div>
             </div>
 
             <div>
-                <button type="button">Generar reporte</button>
+                <button type="button" onClick={fetchPdfData}>Generar reporte</button>
             </div>
 
         </div>
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="http://localhost:8081/archivo/get/reporte/RepPresGI-Solsytec-1000689373.pdf" plugins={[getFilePluginInstance]} />
+                    {pdfUrl && (
+                        <Viewer fileUrl={pdfUrl} plugins={[getFilePluginInstance]} />
+                    )}
                 </Worker>
             </div>
         </div>

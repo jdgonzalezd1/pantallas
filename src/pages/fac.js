@@ -67,10 +67,13 @@ function Fac() {
         </div>
         <div className="flex-container">
             <div>
-                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)}>
+                <select id="facultad"
+                    value={statusF}
+                    onChange={(e) => setStatusF(e.target.value)}
+                >
+                    <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
-                            <option value="0">--Facultad--</option>
                             {facultad.map(facu => (
                                 <option value={facu.id}>{facu.nombre}</option>
                             ))}
