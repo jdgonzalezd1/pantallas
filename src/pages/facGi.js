@@ -6,7 +6,8 @@ import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import { loadGrupo, setRequest } from './loadData';
 import { useLocation } from 'react-router-dom';
 
-
+//Funcionalidad lista
+//Pendiente limpieza y reciclaje
 
 function FacGi() {
     const getFilePluginInstance = getFilePlugin();
@@ -87,8 +88,8 @@ function FacGi() {
     return <>
         <div className="flex-container">
             <div hidden>
-                <input id='reportId' type='text'></input>
-                <input id='userId' type='text'></input>
+                <input id='reportId' type='text' value={reportId} ></input>
+                <input id='userId' type='text' value={userId}></input>
             </div>
             <div>
                 <select id="facultad"

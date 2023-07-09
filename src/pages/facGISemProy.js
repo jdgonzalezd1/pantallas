@@ -6,6 +6,9 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import { loadGrupo, loadSemillero, loadProyecto, setRequest } from './loadData';
 
+//Funcionalidad lista
+//Pendiente limpieza y reciclaje
+
 /*
 Funcion de despliegue de pantalla
 */
@@ -143,14 +146,14 @@ function FacGISemProy() {
         <div className="flex-container">
             <div hidden>
                 <input id='reportId' type='text' value={reportId}/*Traer id reporte*/></input>
-                <input id='userId' type='text' defaultValue={userId}/*Traer id usuario*/></input>
+                <input id='userId' type='text' value={userId}/*Traer id usuario*/></input>
             </div>
             <div>
                 <select id="facultad"
                     value={statusF}
-                    onChange={(e) => setStatusF(e.target.value)}                    
+                    onChange={(e) => setStatusF(e.target.value)}
                     onMouseOut={fetchGrupoData}
-                    >
+                >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -162,11 +165,11 @@ function FacGISemProy() {
                 </select>
             </div>
             <div>
-                <select id="grupoInvestigacion" 
-                value={statusG} 
-                onChange={(e) => setStatusG(e.target.value)}
-                onMouseOver={loadGrupo(grupo, statusF)}
-                onMouseOut={fetchSemilleroData}
+                <select id="grupoInvestigacion"
+                    value={statusG}
+                    onChange={(e) => setStatusG(e.target.value)}
+                    onMouseOver={loadGrupo(grupo, statusF)}
+                    onMouseOut={fetchSemilleroData}
                 >
                     <option value="0">--Grupo--</option>
                 </select>
@@ -174,19 +177,19 @@ function FacGISemProy() {
 
             <div>
                 <select id="semillero"
-                value={statusS}
-                onChange={(e) => setStatusS(e.target.value)} 
-                onMouseOver={loadSemillero(semillero, statusG)}
-                onMouseOut={fetchProyectoData}
+                    value={statusS}
+                    onChange={(e) => setStatusS(e.target.value)}
+                    onMouseOver={loadSemillero(semillero, statusG)}
+                    onMouseOut={fetchProyectoData}
                 >
                     <option value="0">--Semillero--</option>
                 </select>
             </div>
             <div>
-                <select id="proyecto" 
-                value={statusPj} 
-                onChange={(e) => setStatusPj(e.target.value)}
-                onMouseOver={loadProyecto(proyecto, statusPj)}
+                <select id="proyecto"
+                    value={statusPj}
+                    onChange={(e) => setStatusPj(e.target.value)}
+                    onMouseOver={loadProyecto(proyecto, statusPj)}
                 >
                     <option value="0">--Proyecto--</option>
                 </select>

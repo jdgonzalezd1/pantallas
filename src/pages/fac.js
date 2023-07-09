@@ -6,6 +6,9 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import { setRequest } from './loadData';
 
+//Funcionalidad lista
+//Pendiente limpieza y reciclaje
+
 function Fac() {
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
@@ -62,7 +65,7 @@ function Fac() {
 
     return <>
         <div hidden>
-            <input id='reportId' value={reportId} type='text'></input>
+            <input id='reportId' type='text' value={reportId} ></input>
             <input id='userId' type='text' value={userId}></input>
         </div>
         <div className="flex-container">

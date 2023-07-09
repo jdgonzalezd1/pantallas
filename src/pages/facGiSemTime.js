@@ -3,7 +3,11 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadGrupo, loadSemillero } from './loadData';
+import { loadGrupo, loadSemillero, setRequest } from './loadData';
+import { useLocation } from 'react-router-dom';
+
+//Funcionalidad completa
+//Pendiente limpieza y reciclaje
 
 function FacGiSemTime() {
     const getFilePluginInstance = getFilePlugin();
@@ -14,6 +18,16 @@ function FacGiSemTime() {
     const [statusF, setStatusF] = useState("");
     const [statusG, setStatusG] = useState("");
     const [statusS, setStatusS] = useState("");
+    const [statusIni, setStatusIni] = useState("");
+    const [statusFin, setStatusFin] = useState("");
+
+    const [objt, setObjt] = useState({});
+    const [userId, setUserId] = useState("1000689373");
+    const location = useLocation();
+    const { reportId } = location.state;
+
+    const [pdf, setPdf] = useState([]);
+    const [pdfUrl, setPdfUrl] = useState("");
 
     const fetchFacultadData = async () => {
         try {
@@ -28,15 +42,16 @@ function FacGiSemTime() {
 
     const fetchGrupoData = async () => {
         try {
+            setObjt({
+                facultad: statusF
+            })
             const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    facultad: 1001
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setGrupo(parsedResponse);
@@ -47,15 +62,16 @@ function FacGiSemTime() {
 
     const fetchSemilleroData = async () => {
         try {
+            setObjt({
+                gi: statusG
+            })
             const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    gi: 3003
-                })
+                body: JSON.stringify(objt)
             });
             const parsedResponse = await result.json();
             setSemillero(parsedResponse);
@@ -64,23 +80,51 @@ function FacGiSemTime() {
         }
     }
 
+    const fetchPdfDataTime = async () => {
+        try {
+            setObjt({
+                dato: statusS,
+                reporte: reportId,
+                usuario: userId,
+                inicio: statusIni,
+                fin: statusFin
+            })
+            const result = await fetch("http://localhost:8081/report/generar/anios", {
+                method: "POST",
+
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objt)
+            });
+            const parsedResponse = await result.json();
+            setPdf(parsedResponse);
+            let url = setRequest(pdf);
+            setPdfUrl(url);
+        } catch (error) {
+            console.log("Error xd", error);
+        }
+
+    }
+
+
     useEffect(() => {
         fetchFacultadData();
-        fetchGrupoData();
-        fetchSemilleroData();
     }, []);
-
-
-
 
     return <>
         <div className="flex-container">
             <div hidden>
-                <input id='reportId' type='text'></input>
-                <input id='userId' type='text'></input>
+                <input id='reportId' type='text' value={reportId}></input>
+                <input id='userId' type='text' value={userId}></input>
             </div>
             <div>
-                <select className="form-control" id="facultad" value={statusF} onChange={(e) => setStatusF(e.target.value)} onMouseOver={loadGrupo(grupo, statusF)}>
+                <select id="facultad"
+                    value={statusF}
+                    onChange={(e) => setStatusF(e.target.value)}
+                    onMouseOut={fetchGrupoData}
+                >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
@@ -92,18 +136,30 @@ function FacGiSemTime() {
                 </select>
             </div>
             <div>
-                <select className="form-control" id="grupoInvestigacion" value={statusG} onChange={(e) => setStatusG(e.target.value)} onMouseOver={loadSemillero(semillero, statusG)}>
+                <select id="grupoInvestigacion"
+                    value={statusG}
+                    onChange={(e) => setStatusG(e.target.value)}
+                    onMouseOver={loadGrupo(grupo, statusF)}
+                    onMouseOut={fetchSemilleroData}
+                >
                     <option value="0">--Grupo--</option>
                 </select>
             </div>
 
             <div>
-                <select className="form-control" id="semillero" value={statusS} onChange={(e) => setStatusS(e.target.value)}>
+                <select id="semillero"
+                    value={statusS}
+                    onChange={(e) => setStatusS(e.target.value)}
+                    onMouseOver={loadSemillero(semillero, statusG)}
+                >
                     <option value="0">--Semillero--</option>
                 </select>
             </div>
             <div>
-                <select className="form-control" id="anoIni">
+                <select id="anoIni"
+                    value={statusIni}
+                    onChange={(e) => setStatusIni(e.target.value)}
+                >
                     <option value="0">--Año inicial--</option>
                     <option value="2017">2017</option>
                     <option value="2018">2018</option>
@@ -116,7 +172,10 @@ function FacGiSemTime() {
             </div>
 
             <div>
-                <select className="form-control" id="anoFin">
+                <select id="anoFin"
+                    value={statusFin}
+                    onChange={(e) => setStatusFin(e.target.value)}
+                >
                     <option value="0">--Año Final--</option>
                     <option value="2017">2017</option>
                     <option value="2018">2018</option>
@@ -129,14 +188,16 @@ function FacGiSemTime() {
             </div>
 
             <div>
-                <button type="button">Generar reporte</button>
+                <button type="button" onClick={fetchPdfDataTime}>Generar reporte</button>
             </div>
 
         </div>
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    <Viewer fileUrl="http://localhost:8081/archivo/get/reporte/RepUPresGI-Solsytec-(2022-2023)-1000456123.pdf" plugins={[getFilePluginInstance]} />
+                    {pdfUrl && (
+                        <Viewer fileUrl={pdfUrl} plugins={[getFilePluginInstance]} />
+                    )}
                 </Worker>
             </div>
         </div>
