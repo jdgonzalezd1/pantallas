@@ -4,7 +4,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { setRequest } from './loadData';
+import { setRequest } from '../services/loadData'
 
 //Funcionalidad lista
 //Pendiente limpieza y reciclaje
@@ -73,6 +73,7 @@ function Fac() {
                 <select id="facultad"
                     value={statusF}
                     onChange={(e) => setStatusF(e.target.value)}
+                    className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (

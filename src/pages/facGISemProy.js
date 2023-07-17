@@ -4,7 +4,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadGrupo, loadSemillero, loadProyecto, setRequest } from './loadData';
+import { setRequest } from '../services/loadData';
 
 //Funcionalidad lista
 //Pendiente limpieza y reciclaje
@@ -152,7 +152,7 @@ function FacGISemProy() {
                 <select id="facultad"
                     value={statusF}
                     onChange={(e) => setStatusF(e.target.value)}
-                    onMouseOut={fetchGrupoData}
+                    className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
@@ -168,10 +168,17 @@ function FacGISemProy() {
                 <select id="grupoInvestigacion"
                     value={statusG}
                     onChange={(e) => setStatusG(e.target.value)}
-                    onMouseOver={loadGrupo(grupo, statusF)}
-                    onMouseOut={fetchSemilleroData}
+                    onClick={fetchGrupoData}
+                    className='select-general'
                 >
                     <option value="0">--Grupo--</option>
+                    {grupo.length > 0 && (
+                        <>
+                            {grupo.map(group => (
+                                <option value={group.id}>{group.nombre}</option>
+                            ))}
+                        </>
+                    )}
                 </select>
             </div>
 
@@ -179,19 +186,34 @@ function FacGISemProy() {
                 <select id="semillero"
                     value={statusS}
                     onChange={(e) => setStatusS(e.target.value)}
-                    onMouseOver={loadSemillero(semillero, statusG)}
-                    onMouseOut={fetchProyectoData}
+                    onClick={fetchSemilleroData}
+                    className='select-general'
                 >
                     <option value="0">--Semillero--</option>
+                    {semillero.length > 0 && (
+                        <>
+                            {semillero.map(sem => (
+                                <option value={sem.id}>{sem.nombre}</option>
+                            ))}
+                        </>
+                    )}
                 </select>
             </div>
             <div>
                 <select id="proyecto"
                     value={statusPj}
                     onChange={(e) => setStatusPj(e.target.value)}
-                    onMouseOver={loadProyecto(proyecto, statusPj)}
+                    onClick={fetchProyectoData}
+                    className='select-general'
                 >
                     <option value="0">--Proyecto--</option>
+                    {proyecto.length > 0 && (
+                        <>
+                            {proyecto.map(item => (
+                                <option value={item.id}>{item.nombre}</option>
+                            ))}
+                        </>
+                    )}
                 </select>
             </div>
             <div>

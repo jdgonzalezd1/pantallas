@@ -3,7 +3,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadGrupo, setRequest } from './loadData';
+import { setRequest } from '../services/loadData';
 import { useLocation } from 'react-router-dom';
 
 //Funcionalidad lista
@@ -95,7 +95,7 @@ function FacGi() {
                 <select id="facultad"
                     value={statusF}
                     onChange={(e) => setStatusF(e.target.value)}
-                    onMouseOut={fetchGrupoData}
+                    className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
@@ -112,9 +112,17 @@ function FacGi() {
                     <select id="grupoInvestigacion"
                         value={statusG}
                         onChange={(e) => setStatusG(e.target.value)}
-                        onMouseOver={loadGrupo(grupo, statusF)}
+                        onClick={fetchGrupoData}
+                        className='select-general'
                     >
                         <option value="0">--Grupo--</option>
+                        {grupo.length > 0 &&(
+                            <>
+                                {grupo.map(group => (
+                                    <option value={group.id}>{group.nombre}</option>
+                                ))}
+                            </>
+                        )}
                     </select>
                 </div>
             </div>

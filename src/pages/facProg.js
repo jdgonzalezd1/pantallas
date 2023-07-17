@@ -3,7 +3,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { loadPrograma, setRequest } from './loadData';
+import { setRequest } from '../services/loadData';
 import { useLocation } from 'react-router-dom';
 
 //Funcionalidad lista
@@ -101,7 +101,7 @@ function FacProg() {
                 <select id="facultad"
                     value={statusF}
                     onChange={(e) => setStatusF(e.target.value)}
-                    onMouseOut={fetchProgramaData}
+                    className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
@@ -117,9 +117,17 @@ function FacProg() {
                 <select id="programa"
                     value={statusP}
                     onChange={(e) => setStatusP(e.target.value)}
-                    onMouseOver={loadPrograma(programa, statusF)}
+                    onClick={fetchProgramaData}
+                    className='select-general'
                 >
                     <option value="0">--Programa--</option>
+                    {programa.length > 0 && (
+                        <>
+                            {programa.map(item => (
+                                <option value={item.id}>{item.nombre}</option>
+                            ))}
+                        </>
+                    )}
                 </select>
             </div>
 
@@ -131,7 +139,7 @@ function FacProg() {
         <div>
             <div className="pdf-section">
                 <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                    {pdfUrl && (
+                    {pdfUrl !== "" && (
                         <Viewer fileUrl={pdfUrl} plugins={[getFilePluginInstance]} />
                     )}
                 </Worker>
