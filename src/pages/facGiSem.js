@@ -7,9 +7,11 @@ import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import { setRequest } from '../services/loadData';
 
 //Funcionalidad lista
-//Pendiente limpieza y reciclaje
+//Pendiente reciclaje
 
 function FacGiSem() {
+    let request = {};
+
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
@@ -19,12 +21,10 @@ function FacGiSem() {
     const [statusG, setStatusG] = useState("");
     const [statusS, setStatusS] = useState("");
 
-    const [objt, setObjt] = useState({});
     const [userId, setUserId] = useState("1000689373");
     const location = useLocation();
     const { reportId } = location.state;
 
-    const [pdf, setPdf] = useState([]);
     const [pdfUrl, setPdfUrl] = useState("");
 
     const fetchFacultadData = async () => {
@@ -38,18 +38,18 @@ function FacGiSem() {
 
     }
 
-    const fetchGrupoData = async () => {
+    const fetchGrupoData = async (facultad) => {
         try {
-            setObjt({
-                facultad: statusF
-            })
+            request = {
+                facultad
+            }
             const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
             setGrupo(parsedResponse);
@@ -58,18 +58,18 @@ function FacGiSem() {
         }
     }
 
-    const fetchSemilleroData = async () => {
+    const fetchSemilleroData = async (gi) => {
         try {
-            setObjt({
-                gi: statusG
-            })
+            request = {
+                gi
+            }
             const result = await fetch("http://localhost:8081/filtro/facultad/gi/semillero", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
             setSemillero(parsedResponse);
@@ -80,11 +80,11 @@ function FacGiSem() {
 
     const fetchPdfData = async () => {
         try {
-            setObjt({
+            request = {
                 dato: statusS,
                 reporte: reportId,
                 usuario: userId
-            })
+            }
             const result = await fetch("http://localhost:8081/report/generar", {
                 method: "POST",
 
@@ -92,11 +92,10 @@ function FacGiSem() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
-            setPdf(parsedResponse);
-            let url = setRequest(pdf);
+            let url = setRequest(parsedResponse);
             setPdfUrl(url);
         } catch (error) {
             console.log("Error xd", error);
@@ -108,26 +107,30 @@ function FacGiSem() {
         fetchFacultadData();
     }, []);
 
+    const handleFacultySelected = async (event) => {
+        setStatusF(event.target.value);
+        await fetchGrupoData(event.target.value);
+    }
 
+    const handleGISelected = async (event) => {
+        setStatusG(event.target.value);
+        await fetchSemilleroData(event.target.value);
+    }
 
 
     return <>
         <div className="flex-container">
-            <div hidden>
-                <input id='reportId' type='text' value={reportId}></input>
-                <input id='userId' type='text' value={userId}></input>
-            </div>
             <div>
                 <select id="facultad"
                     value={statusF}
-                    onChange={(e) => setStatusF(e.target.value)}
+                    onChange={async (e) => await handleFacultySelected(e)}
                     className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
                             {facultad.map(facu => (
-                                <option value={facu.id}>{facu.nombre}</option>
+                                <option value={facu.id} key={facu.id}>{facu.nombre}</option>
                             ))}
                         </>
                     )}
@@ -136,15 +139,14 @@ function FacGiSem() {
             <div>
                 <select id="grupoInvestigacion"
                     value={statusG}
-                    onChange={(e) => setStatusG(e.target.value)}
-                    onClick={fetchGrupoData}
+                    onChange={async (e) => await handleGISelected(e)}
                     className='select-general'
                 >
                     <option value="0">--Grupo--</option>
                     {grupo.length > 0 && (
                         <>
                             {grupo.map(group => (
-                                <option value={group.id}>{group.nombre}</option>
+                                <option value={group.id} key={group.id}>{group.nombre}</option>
                             ))}
                         </>
                     )}
@@ -155,14 +157,13 @@ function FacGiSem() {
                 <select id="semillero"
                     value={statusS}
                     onChange={(e) => setStatusS(e.target.value)}
-                    onClick={fetchSemilleroData}
                     className='select-general'
                 >
                     <option value="0">--Semillero--</option>
                     {semillero.length > 0 && (
                         <>
                             {semillero.map(sem => (
-                                <option value={sem.id}>{sem.nombre}</option>
+                                <option value={sem.id} key={sem.id}>{sem.nombre}</option>
                             ))}
                         </>
                     )}
@@ -184,7 +185,9 @@ function FacGiSem() {
             </div>
         </div>
         <div className="flex-container-center">
-            <button type="button" className="download-button"><Download /></button>
+            <div role="button" className="download-button">
+                <Download />
+            </div>
         </div>
 
     </>

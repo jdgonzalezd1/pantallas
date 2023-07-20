@@ -7,9 +7,10 @@ import { setRequest } from '../services/loadData';
 import { useLocation } from 'react-router-dom';
 
 //Funcionalidad lista
-//Pendiente limpieza y reciclaje
+//Pendiente reciclaje
 
 function FacGi() {
+    let request = {};
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
@@ -17,12 +18,10 @@ function FacGi() {
     const [statusF, setStatusF] = useState("");
     const [statusG, setStatusG] = useState("");
 
-    const [objt, setObjt] = useState({});
     const [userId, setUserId] = useState("1000689373");
     const location = useLocation();
     const { reportId } = location.state;
 
-    const [pdf, setPdf] = useState([]);
     const [pdfUrl, setPdfUrl] = useState("");
 
     const fetchFacultadData = async () => {
@@ -35,18 +34,18 @@ function FacGi() {
         }
     }
 
-    const fetchGrupoData = async () => {
+    const fetchGrupoData = async (facultad) => {
         try {
-            setObjt({
-                facultad: statusF
-            })
+            request = {
+                facultad
+            }
             const result = await fetch("http://localhost:8081/filtro/facultad/gi", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
             setGrupo(parsedResponse);
@@ -57,11 +56,11 @@ function FacGi() {
 
     const fetchPdfData = async () => {
         try {
-            setObjt({
+            request = {
                 dato: statusG,
                 reporte: reportId,
                 usuario: userId
-            })
+            }
             const result = await fetch("http://localhost:8081/report/generar", {
                 method: "POST",
 
@@ -69,62 +68,58 @@ function FacGi() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
-            setPdf(parsedResponse);
-            let url = setRequest(pdf);
+            let url = setRequest(parsedResponse);
             setPdfUrl(url);
         } catch (error) {
             console.log("Error xd", error);
         }
-
     }
 
     useEffect(() => {
         fetchFacultadData();
     }, []);
 
+    const handleFacultySelected = async (event) => {
+        setStatusF(event.target.value);
+        await fetchGrupoData(event.target.value);
+    }
+
     return <>
         <div className="flex-container">
-            <div hidden>
-                <input id='reportId' type='text' value={reportId} ></input>
-                <input id='userId' type='text' value={userId}></input>
-            </div>
             <div>
                 <select id="facultad"
                     value={statusF}
-                    onChange={(e) => setStatusF(e.target.value)}
+                    onChange={async (e) => await handleFacultySelected(e)}
                     className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
                             {facultad.map(facu => (
-                                <option value={facu.id}>{facu.nombre}</option>
+                                <option value={facu.id} key={facu.id}>{facu.nombre}</option>
                             ))}
                         </>
                     )}
                 </select>
             </div>
             <div>
-                <div>
-                    <select id="grupoInvestigacion"
-                        value={statusG}
-                        onChange={(e) => setStatusG(e.target.value)}
-                        onClick={fetchGrupoData}
-                        className='select-general'
-                    >
-                        <option value="0">--Grupo--</option>
-                        {grupo.length > 0 &&(
-                            <>
-                                {grupo.map(group => (
-                                    <option value={group.id}>{group.nombre}</option>
-                                ))}
-                            </>
-                        )}
-                    </select>
-                </div>
+                <select id="grupoInvestigacion"
+                    value={statusG}
+                    onChange={(e) => setStatusG(e.target.value)}
+                    className='select-general'
+                >
+                    <option value="0">--Grupo--</option>
+                    {grupo.length > 0 && (
+                        <>
+                            {grupo.map(group => (
+                                <option value={group.id} key={group.id}>{group.nombre}</option>
+                            ))}
+                        </>
+                    )}
+                </select>
             </div>
 
             <div>
@@ -142,7 +137,9 @@ function FacGi() {
             </div>
         </div>
         <div className="flex-container-center">
-            <button type="button" className="download-button"><Download /></button>
+            <div role="button" className="download-button">
+                <Download />
+            </div>
         </div>
 
     </>

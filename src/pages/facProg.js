@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 
 
 function FacProg() {
+    let request = {};
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
@@ -18,12 +19,10 @@ function FacProg() {
     const [statusF, setStatusF] = useState("");
     const [statusP, setStatusP] = useState("");
 
-    const [objt, setObjt] = useState({});
     const [userId, setUserId] = useState("1000689373");
     const location = useLocation();
     const { reportId } = location.state;
 
-    const [pdf, setPdf] = useState([]);
     const [pdfUrl, setPdfUrl] = useState("");
 
 
@@ -38,18 +37,18 @@ function FacProg() {
 
     }
 
-    const fetchProgramaData = async () => {
+    const fetchProgramaData = async (facultad) => {
         try {
-            setObjt({
-                facultad: statusF
-            })
+            request = {
+                facultad
+            }
             const result = await fetch("http://localhost:8081/filtro/facultad/programa", {
                 method: "POST",
 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
             setPrograma(parsedResponse);
@@ -60,11 +59,11 @@ function FacProg() {
 
     const fetchPdfData = async () => {
         try {
-            setObjt({
+            request = {
                 dato: statusP,
                 reporte: reportId,
                 usuario: userId
-            })
+            }
             const result = await fetch("http://localhost:8081/report/generar", {
                 method: "POST",
 
@@ -72,11 +71,10 @@ function FacProg() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
-            setPdf(parsedResponse);
-            let url = setRequest(pdf);
+            let url = setRequest(parsedResponse);
             setPdfUrl(url);
         } catch (error) {
             console.log("Error xd", error);
@@ -88,26 +86,25 @@ function FacProg() {
         fetchFacultadData();
     }, []);
 
-
+    const handleFacultySelected = async (event) => {
+        setStatusF(event.target.value);
+        await fetchProgramaData(event.target.value);
+    }
 
 
     return <>
         <div className="flex-container">
-            <div hidden>
-                <input id='reportId' value={reportId} type='text'></input>
-                <input id='userId' value={userId} type='text'></input>
-            </div>
             <div>
                 <select id="facultad"
                     value={statusF}
-                    onChange={(e) => setStatusF(e.target.value)}
+                    onChange={async (e) => await handleFacultySelected(e)}
                     className='select-general'
                 >
                     <option value="0">--Facultad--</option>
                     {facultad.length > 0 && (
                         <>
                             {facultad.map(facu => (
-                                <option value={facu.id}>{facu.nombre}</option>
+                                <option value={facu.id} key={facu.id}>{facu.nombre}</option>
                             ))}
                         </>
                     )}
@@ -117,14 +114,13 @@ function FacProg() {
                 <select id="programa"
                     value={statusP}
                     onChange={(e) => setStatusP(e.target.value)}
-                    onClick={fetchProgramaData}
                     className='select-general'
                 >
                     <option value="0">--Programa--</option>
                     {programa.length > 0 && (
                         <>
                             {programa.map(item => (
-                                <option value={item.id}>{item.nombre}</option>
+                                <option value={item.id} key={item.id}>{item.nombre}</option>
                             ))}
                         </>
                     )}
@@ -146,9 +142,10 @@ function FacProg() {
             </div>
         </div>
         <div className="flex-container-center">
-            <button type="button" className="download-button"><Download /></button>
+            <div role="button" className="download-button">
+                <Download />
+            </div>
         </div>
-
     </>
 
 }

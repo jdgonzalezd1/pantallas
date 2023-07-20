@@ -10,16 +10,15 @@ import { setRequest } from '../services/loadData'
 //Pendiente limpieza y reciclaje
 
 function Fac() {
+    let request = {};
     const getFilePluginInstance = getFilePlugin();
     const { Download } = getFilePluginInstance;
     const [facultad, setFacultad] = useState([]);
     const [statusF, setStatusF] = useState([]);
 
-    const [pdf, setPdf] = useState([]);
     const [pdfUrl, setPdfUrl] = useState("");
-
-    const [objt, setObjt] = useState({});
     const [userId, setUserId] = useState("1000689373");
+
     const location = useLocation();
     const { reportId } = location.state;
 
@@ -35,11 +34,11 @@ function Fac() {
 
     const fetchPdfData = async () => {
         try {
-            setObjt({
+            request = {
                 dato: statusF,
                 reporte: reportId,
                 usuario: userId
-            })
+            }
             const result = await fetch("http://localhost:8081/report/generar", {
                 method: "POST",
 
@@ -47,11 +46,10 @@ function Fac() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(objt)
+                body: JSON.stringify(request)
             });
             const parsedResponse = await result.json();
-            setPdf(parsedResponse);
-            let url = setRequest(pdf);
+            let url = setRequest(parsedResponse);
             setPdfUrl(url);
         } catch (error) {
             console.log("Error xd", error);
@@ -64,10 +62,6 @@ function Fac() {
     }, []);
 
     return <>
-        <div hidden>
-            <input id='reportId' type='text' value={reportId} ></input>
-            <input id='userId' type='text' value={userId}></input>
-        </div>
         <div className="flex-container">
             <div>
                 <select id="facultad"
@@ -79,7 +73,7 @@ function Fac() {
                     {facultad.length > 0 && (
                         <>
                             {facultad.map(facu => (
-                                <option value={facu.id}>{facu.nombre}</option>
+                                <option value={facu.id} key={facu.id}>{facu.nombre}</option>
                             ))}
                         </>
                     )}
@@ -100,7 +94,9 @@ function Fac() {
             </div>
         </div>
         <div className="flex-container-center">
-            <button type="button" className="download-button"><Download /></button>
+            <div role="button" className="download-button">
+                <Download />
+            </div>
         </div>
 
     </>
