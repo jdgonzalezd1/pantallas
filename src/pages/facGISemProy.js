@@ -4,7 +4,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
-import { setRequest } from '../services/loadData';
+import { setRequest, repNames } from '../services/loadData';
 
 //Funcionalidad lista
 //Pendiente reciclaje
@@ -156,6 +156,9 @@ function FacGISemProy() {
     Funcion de renderizado
     */
     return <>
+        <div>
+            <h1>{repNames[reportId]}</h1>
+        </div>
         <div className="flex-container">
             <div>
                 <select id="facultad"
