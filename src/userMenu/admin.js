@@ -46,7 +46,7 @@ const Admin = () => {
                     <h1>Presupuesto</h1>
                     <ul>
                         <li><Link to="/facGiSem" state={{reportId:"9"}}>Uso Semilleros</Link></li>
-                        <li><Link to="/facGiSem" state={{reportId:"19"}}>Uso Grupos de investigación</Link></li>
+                        <li><Link to="/facGi" state={{reportId:"19"}}>Uso Grupos de investigación</Link></li>
                         <li><Link to="/facGiSemTime" state={{reportId:"25"}}>Uso Semilleros en periodo</Link></li>
                         <li><Link to="/facGiTime" state={{reportId:"26"}}>Uso Grupo de investigación en periodo</Link></li>                    
                     </ul>
