@@ -5,5 +5,6 @@ To see the full project, go to: https://github.com/alejandropg339/SGP-FRONTEND/t
 
 The functionalities tested in this project were corrected and integrated in the main system,
 AKA SGPI - Sistema de Gestión de Proyectos Institucionales, specifically in the reports module.
+
 If you want to check this out, go to: https://github.com/alejandropg339/SGP-FRONTEND/tree/FEAT/REPORTS
 
